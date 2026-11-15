@@ -1,0 +1,82 @@
+<Window x:Class="QuJie.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        Title="驱界"
+        Width="1360"
+        Height="860"
+        MinWidth="1120"
+        MinHeight="720"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        Background="#070B14"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display"
+        FontFamily="Segoe UI Variable Display, Microsoft YaHei UI, Microsoft YaHei"
+        Closing="Window_Closing"
+        StateChanged="Window_StateChanged"
+        SourceInitialized="Window_SourceInitialized">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0"
+                      ResizeBorderThickness="7"
+                      CornerRadius="0"
+                      GlassFrameThickness="0"
+                      UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+
+    <Grid Background="#070B14">
+        <wv2:WebView2 x:Name="WebView"
+                      Visibility="Hidden"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      ZoomFactor="1" />
+
+        <Grid x:Name="LoadingOverlay">
+            <Grid.Background>
+                <RadialGradientBrush Center="0.78,0.04" GradientOrigin="0.78,0.04" RadiusX="0.75" RadiusY="0.9">
+                    <GradientStop Color="#122341" Offset="0" />
+                    <GradientStop Color="#070B14" Offset="0.66" />
+                </RadialGradientBrush>
+            </Grid.Background>
+
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="420">
+                <Border Width="92" Height="92" CornerRadius="26" HorizontalAlignment="Center"
+                        Background="#0B1220" BorderBrush="#1C2B43" BorderThickness="1">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="46" ShadowDepth="0" Opacity="0.34" Color="#4A8CFF" />
+                    </Border.Effect>
+                    <Image Source="assets/icon-256.png" Width="92" Height="92"
+                           RenderOptions.BitmapScalingMode="HighQuality" />
+                </Border>
+
+                <TextBlock Text="驱界" Margin="0,25,0,0" HorizontalAlignment="Center"
+                           FontSize="25" FontWeight="SemiBold" Foreground="#EDF3FF" />
+                <TextBlock Text="正在读取设备与驱动状态…" Margin="0,8,0,0"
+                           HorizontalAlignment="Center" FontSize="11.5" Foreground="#73839A" />
+
+                <Border Width="210" Height="3" Margin="0,28,0,0" CornerRadius="2" ClipToBounds="True"
+                        Background="#152033">
+                    <Border x:Name="LoadingPulse" Width="64" Height="3" HorizontalAlignment="Left"
+                            CornerRadius="2" Background="#5DE7FF">
+                        <Border.RenderTransform>
+                            <TranslateTransform x:Name="LoadingPulseTransform" X="-64" />
+                        </Border.RenderTransform>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.6" Color="#5DE7FF" />
+                        </Border.Effect>
+                    </Border>
+                </Border>
+
+                <TextBlock Text="检测  ·  更新  ·  修复" Margin="0,28,0,0" HorizontalAlignment="Center"
+                           FontSize="10" Foreground="#53647B" />
+            </StackPanel>
+
+            <TextBlock Text="Q U J I E   ·   D R I V E R   C A R E"
+                       HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,24"
+                       FontSize="8" Foreground="#4C5C72" Opacity="0.8" />
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>驱界 · 驱动检测与更新</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <svg class="svg-sprite" aria-hidden="true">
+    <defs>
+      <symbol id="i-overview" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+      <symbol id="i-device" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="3"/><path d="M10 18h4"/><path d="M9 7h6"/></symbol>
+      <symbol id="i-update" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2v-.48A1.7 1.7 0 0 0 12.38 18a1.7 1.7 0 0 0-1.88.34l-.06.06-1.42-1.42.06-.06A1.7 1.7 0 0 0 9.42 15a1.7 1.7 0 0 0-1.56-1.03H7v-2h.86A1.7 1.7 0 0 0 9.42 10a1.7 1.7 0 0 0-.34-1.88l-.06-.06 1.42-1.42.06.06A1.7 1.7 0 0 0 12.38 7a1.7 1.7 0 0 0 1.03-1.56V5h2v.44A1.7 1.7 0 0 0 16.44 7a1.7 1.7 0 0 0 1.88-.34l.06-.06 1.42 1.42-.06.06A1.7 1.7 0 0 0 19.4 10a1.7 1.7 0 0 0 1.56 1.03H21v2h-.04A1.7 1.7 0 0 0 19.4 15Z"/></symbol>
+      <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3"/><path d="M16 4h3a1 1 0 0 1 1 1v3"/><path d="M20 16v3a1 1 0 0 1-1 1h-3"/><path d="M8 20H5a1 1 0 0 1-1-1v-3"/><circle cx="12" cy="12" r="3.5"/></symbol>
+      <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/><path d="M10 12h4"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.4 3 8.2 7 10 4-1.8 7-5.6 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4L12 3Z"/><path d="M12 9v5"/><path d="M12 17.2v.2"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.8-4L3 10"/><path d="M3 4v6h6"/><path d="M4 13a8 8 0 0 0 14.8 4L21 14"/><path d="M21 20v-6h-6"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+      <symbol id="i-min" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+      <symbol id="i-max" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="1"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4a8.5 8.5 0 1 0 11.2 11.2Z"/></symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></symbol>
+      <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8v.2"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+      <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></symbol>
+      <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2.1-2.1 2.2-2Z"/></symbol>
+      <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v7c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12v7c0 1.7 3.6 3 8 3s8-1.3 8-3v-7"/></symbol>
+      <symbol id="i-bolt" viewBox="0 0 24 24"><path d="m13 2-9 12h7l-1 8 9-12h-7l1-8Z"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="app-shell">
+    <header class="topbar" id="topbar">
+      <div class="brand">
+        <img src="assets/icon-64.png" class="brand-icon" alt="" draggable="false">
+        <div class="brand-copy">
+          <div class="brand-name">驱界</div>
+          <div class="brand-sub">DRIVER CARE</div>
+        </div>
+      </div>
+
+      <div class="topbar-center">
+        <span class="live-dot"></span>
+        <span id="topStatus">正在读取设备状态</span>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="admin-pill" id="adminPill" title="管理员权限由 Windows UAC 授予">
+          <svg class="icon"><use href="#i-shield"></use></svg>
+          <span id="adminPillText">管理员</span>
+        </div>
+        <button class="icon-btn" id="themeToggle" title="切换深浅模式">
+          <svg class="icon theme-icon-dark"><use href="#i-moon"></use></svg>
+          <svg class="icon theme-icon-light"><use href="#i-sun"></use></svg>
+        </button>
+        <div class="window-controls">
+          <button class="window-btn" data-window="minimize" title="最小化"><svg class="icon"><use href="#i-min"></use></svg></button>
+          <button class="window-btn" data-window="maximize" title="最大化"><svg class="icon"><use href="#i-max"></use></svg></button>
+          <button class="window-btn close" data-window="close" title="关闭"><svg class="icon"><use href="#i-close"></use></svg></button>
+        </div>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <aside class="sidebar">
+        <div class="nav-section-label">驱动工作台</div>
+        <nav class="nav">
+          <button class="nav-item is-active" data-page="overview">
+            <span class="nav-icon"><svg class="icon"><use href="#i-overview"></use></svg></span>
+            <span>概览</span>
+          </button>
+          <button class="nav-item" data-page="devices">
+            <span class="nav-icon"><svg class="icon"><use href="#i-chip"></use></svg></span>
+            <span>设备驱动</span>
+            <span class="nav-badge" id="navDeviceBadge" hidden>0</span>
+          </button>
+          <button class="nav-item" data-page="updates">
+            <span class="nav-icon"><svg class="icon"><use href="#i-update"></use></svg></span>
+            <span>驱动更新</span>
+            <span class="nav-badge" id="navUpdateBadge" hidden>0</span>
+          </button>
+        </nav>
+
+        <div class="nav-section-label">系统</div>
+        <nav class="nav">
+          <button class="nav-item" data-page="settings">
+            <span class="nav-icon"><svg class="icon"><use href="#i-settings"></use></svg></span>
+            <span>设置</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-spacer"></div>
+
+        <div class="side-status-card">
+          <div class="side-status-head">
+            <span>驱动健康</span>
+            <b id="sidebarHealthLabel">待检测</b>
+          </div>
+          <div class="side-health-row">
+            <span class="side-health-score" id="sideHealthScore">--</span>
+            <span class="side-health-unit">/ 100</span>
+          </div>
+          <div class="side-health-track"><i id="sideHealthBar" style="width:0%"></i></div>
+          <div class="side-status-grid">
+            <div><span>缺失</span><b id="sideMissing">--</b></div>
+            <div><span>过旧</span><b id="sideOld">--</b></div>
+            <div><span>更新</span><b id="sideUpdates">--</b></div>
+          </div>
+          <div class="side-updated" id="sidebarUpdated">等待首次扫描</div>
+        </div>
+
+        <div class="sidebar-foot">
+          <span id="sidebarVersion">驱界 v1.0.0</span>
+          <span class="admin-mini" id="sidebarAdmin">UAC 管理员</span>
+        </div>
+      </aside>
+
+      <main class="main-scroll" id="mainScroll">
+        <!-- OVERVIEW -->
+        <section class="page is-active" data-page="overview" id="page-overview">
+          <header class="page-head">
+            <div>
+              <div class="eyebrow">OVERVIEW / 驱动概览</div>
+              <h1>让每台设备，<br>跑在正确的驱动上。</h1>
+              <p>自动读取本机设备与驱动版本，检查缺失、异常和过旧驱动，并通过 Windows Update 获取可用更新。</p>
+            </div>
+            <div class="page-actions">
+              <button class="btn ghost" id="openWuBtn"><svg class="icon"><use href="#i-external"></use></svg>Windows 更新</button>
+              <button class="btn primary" id="scanBtn"><svg class="icon"><use href="#i-scan"></use></svg><span id="scanBtnLabel">检查驱动</span></button>
+            </div>
+          </header>
+
+          <div class="scan-progress-card" id="scanProgressCard" hidden>
+            <div class="scan-progress-head">
+              <span id="scanProgressLabel">正在扫描设备…</span>
+              <b id="scanProgressPercent">0%</b>
+            </div>
+            <div class="progress-track"><i id="scanProgressBar"></i></div>
+          </div>
+
+          <section class="hero-card">
+            <div class="hero-glow hero-glow-a"></div>
+            <div class="hero-glow hero-glow-b"></div>
+            <div class="hero-copy">
+              <div class="hero-kicker"><span class="pulse-dot"></span><span id="heroKicker">正在准备驱动检测</span></div>
+              <h2 id="heroTitle">先扫描一次，看看系统缺什么。</h2>
+              <p id="heroText">驱动缺失会让设备出现黄色感叹号、无法联网、没有声音或分辨率异常。驱界会读取真实设备状态，不会伪造扫描结果。</p>
+              <div class="hero-chips">
+                <span><b id="heroMissing">--</b> 缺失驱动</span>
+                <span><b id="heroOld">--</b> 过旧驱动</span>
+                <span><b id="heroUpdates">--</b> 可用更新</span>
+              </div>
+              <div class="hero-actions">
+                <button class="btn primary small" id="heroUpdateBtn" hidden><svg class="icon"><use href="#i-download"></use></svg><span id="heroUpdateLabel">安装驱动更新</span></button>
+                <button class="btn ghost small" id="heroScanBtn"><svg class="icon"><use href="#i-refresh"></use></svg>重新扫描</button>
+              </div>
+            </div>
+            <div class="hero-health">
+              <div class="health-ring" id="healthRing">
+                <div class="health-inner">
+                  <div class="health-score" id="healthScore">--</div>
+                  <div class="health-label">驱动健康</div>
+                </div>
+              </div>
+              <div class="health-caption" id="healthCaption">等待扫描</div>
+            </div>
+          </section>
+
+          <div class="stat-grid">
+            <article class="stat-card tone-red">
+              <div class="stat-icon"><svg class="icon"><use href="#i-alert"></use></svg></div>
+              <div class="stat-label">缺失驱动</div>
+              <div class="stat-value" id="statMissing">--</div>
+              <div class="stat-sub" id="statMissingSub">未扫描</div>
+              <div class="stat-track"><i id="statMissingBar"></i></div>
+            </article>
+            <article class="stat-card tone-amber">
+              <div class="stat-icon"><svg class="icon"><use href="#i-clock"></use></svg></div>
+              <div class="stat-label">过旧驱动</div>
+              <div class="stat-value" id="statOld">--</div>
+              <div class="stat-sub" id="statOldSub">未扫描</div>
+              <div class="stat-track"><i id="statOldBar"></i></div>
+            </article>
+            <article class="stat-card tone-cyan">
+              <div class="stat-icon"><svg class="icon"><use href="#i-update"></use></svg></div>
+              <div class="stat-label">可用更新</div>
+              <div class="stat-value" id="statUpdates">--</div>
+              <div class="stat-sub" id="statUpdatesSub">查询 Windows Update</div>
+              <div class="stat-track"><i id="statUpdatesBar"></i></div>
+            </article>
+            <article class="stat-card tone-mint">
+              <div class="stat-icon"><svg class="icon"><use href="#i-chip"></use></svg></div>
+              <div class="stat-label">已识别设备</div>
+              <div class="stat-value" id="statDevices">--</div>
+              <div class="stat-sub" id="statDevicesSub">本机在线设备</div>
+              <div class="stat-track"><i id="statDevicesBar"></i></div>
+            </article>
+          </div>
+
+          <div class="two-column">
+            <article class="card issue-card">
+              <div class="card-head">
+                <div>
+                  <div class="card-title">需要关注的设备</div>
+                  <div class="card-sub">按缺失、异常、过旧优先级排序</div>
+                </div>
+                <button class="link-btn" data-nav="devices">全部设备<svg class="icon"><use href="#i-chevron"></use></svg></button>
+              </div>
+              <div class="issue-list" id="issueList">
+                <div class="empty-inline">扫描后在这里显示需要处理的设备。</div>
+              </div>
+            </article>
+
+            <article class="card update-preview-card">
+              <div class="card-head">
+                <div>
+                  <div class="card-title">Windows Update 驱动</div>
+                  <div class="card-sub" id="updatePreviewSub">正在等待驱动更新查询</div>
+                </div>
+                <span class="source-badge">Microsoft 认证</span>
+              </div>
+              <div class="update-preview" id="updatePreviewList">
+                <div class="empty-inline">查询后显示可用驱动更新。</div>
+              </div>
+              <div class="card-foot">
+                <button class="btn ghost small" data-nav="updates"><svg class="icon"><use href="#i-update"></use></svg>查看更新</button>
+                <button class="btn primary small" id="installAllBtn" disabled><svg class="icon"><use href="#i-download"></use></svg>安装全部</button>
+              </div>
+            </article>
+          </div>
+
+          <article class="card source-card">
+            <div class="source-icon"><svg class="icon"><use href="#i-database"></use></svg></div>
+            <div class="source-copy">
+              <div class="card-title">驱动来源说明</div>
+              <p>在线更新来自 <b>Windows Update</b>，只包含微软认证的驱动包。厂商专属驱动（如显卡、网卡）如果未通过 Windows Update 发布，请使用厂商工具或从官方下载 .inf 驱动后导入。</p>
+            </div>
+            <button class="btn ghost small" id="importDriverBtn"><svg class="icon"><use href="#i-folder"></use></svg>导入驱动</button>
+          </article>
+        </section>
+
+        <!-- DEVICES -->
+        <section class="page" data-page="devices" id="page-devices" hidden>
+          <header class="page-head">
+            <div>
+              <div class="eyebrow">DEVICES / 设备驱动</div>
+              <h1>谁缺驱动，<br>一眼看清。</h1>
+              <p>读取本机在线 PnP 设备、驱动版本和驱动日期。点击设备查看硬件 ID、问题代码和驱动详情。</p>
+            </div>
+            <div class="page-actions">
+              <button class="btn ghost" id="deviceRefreshBtn"><svg class="icon"><use href="#i-refresh"></use></svg>重新扫描</button>
+              <button class="btn primary" id="deviceScanBtn"><svg class="icon"><use href="#i-scan"></use></svg>检查驱动</button>
+            </div>
+          </header>
+
+          <div class="device-toolbar card">
+            <div class="search-box">
+              <svg class="icon"><use href="#i-search"></use></svg>
+              <input id="deviceSearch" type="text" placeholder="搜索设备名称、类型或制造商">
+            </div>
+            <div class="filter-chips" id="deviceFilters">
+              <button class="filter-chip is-active" data-filter="all">全部 <b id="filterAllCount">0</b></button>
+              <button class="filter-chip" data-filter="missing">缺失 <b id="filterMissingCount">0</b></button>
+              <button class="filter-chip" data-filter="problem">异常 <b id="filterProblemCount">0</b></button>
+              <button class="filter-chip" data-filter="old">过旧 <b id="filterOldCount">0</b></button>
+              <button class="filter-chip" data-filter="ok">正常 <b id="filterOkCount">0</b></button>
+            </div>
+          </div>
+
+          <article class="card device-table-card">
+            <div class="card-head compact">
+              <div class="card-title">设备列表</div>
+              <div class="table-meta"><span id="deviceCountLabel">0 个设备</span><span class="dot-sep"></span><span>数据来自本机 PnP</span></div>
+            </div>
+            <div class="device-table-wrap">
+              <table class="device-table">
+                <thead>
+                  <tr><th>设备</th><th>类型</th><th>制造商</th><th>驱动版本</th><th>驱动日期</th><th>状态</th></tr>
+                </thead>
+                <tbody id="deviceRows"></tbody>
+              </table>
+              <div class="empty-state" id="deviceEmpty" hidden>
+                <div class="empty-icon"><svg class="icon"><use href="#i-chip"></use></svg></div>
+                <h3>还没有设备数据</h3>
+                <p>点击“检查驱动”扫描本机设备。</p>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <!-- UPDATES -->
+        <section class="page" data-page="updates" id="page-updates" hidden>
+          <header class="page-head">
+            <div>
+              <div class="eyebrow">UPDATES / 驱动更新</div>
+              <h1>把能更新的，<br>一次更新好。</h1>
+              <p>通过 Windows Update 查询可用的驱动更新，下载并安装后重新扫描设备。部分驱动需要重启电脑后生效。</p>
+            </div>
+            <div class="page-actions">
+              <button class="btn ghost" id="refreshUpdatesBtn"><svg class="icon"><use href="#i-refresh"></use></svg>重新检查</button>
+              <button class="btn primary" id="installSelectedBtn" disabled><svg class="icon"><use href="#i-download"></use></svg>安装选中</button>
+            </div>
+          </header>
+
+          <div class="update-status-card" id="updateStatusCard">
+            <div class="update-status-icon"><svg class="icon"><use href="#i-update"></use></svg></div>
+            <div class="update-status-copy">
+              <b id="updateStatusTitle">等待检查 Windows Update</b>
+              <span id="updateStatusText">只查询驱动类型更新，不安装系统功能更新。</span>
+            </div>
+            <span class="source-badge large">Windows Update</span>
+          </div>
+
+          <div class="scan-progress-card" id="updateProgressCard" hidden>
+            <div class="scan-progress-head">
+              <span id="updateProgressLabel">正在查询驱动更新…</span>
+              <b id="updateProgressPercent">0%</b>
+            </div>
+            <div class="progress-track"><i id="updateProgressBar"></i></div>
+          </div>
+
+          <article class="card update-list-card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">可用驱动更新</div>
+                <div class="card-sub" id="updateListSub">尚未查询</div>
+              </div>
+              <label class="check-all"><input type="checkbox" id="selectAllUpdates"><span>全选</span></label>
+            </div>
+            <div class="update-list" id="updateList">
+              <div class="empty-inline">正在等待 Windows Update 查询结果。</div>
+            </div>
+            <div class="empty-state" id="updateEmpty" hidden>
+              <div class="empty-icon"><svg class="icon"><use href="#i-check"></use></svg></div>
+              <h3 id="updateEmptyTitle">暂无可用驱动更新</h3>
+              <p id="updateEmptyText">Windows Update 当前没有提供驱动更新。缺失设备可以尝试厂商驱动。</p>
+            </div>
+            <div class="card-foot update-foot">
+              <span id="selectedUpdateCount">未选择更新</span>
+              <div class="foot-actions">
+                <button class="btn ghost small" id="openWuFromUpdates"><svg class="icon"><use href="#i-external"></use></svg>打开 Windows 更新</button>
+                <button class="btn primary small" id="installSelectedBtnFoot" disabled><svg class="icon"><use href="#i-download"></use></svg>安装选中</button>
+              </div>
+            </div>
+          </article>
+
+          <div class="two-column">
+            <article class="card import-card">
+              <div class="card-head"><div><div class="card-title">从文件夹安装驱动</div><div class="card-sub">离线 .inf 驱动 · pnputil</div></div></div>
+              <p class="muted-copy">选择包含 .inf 的驱动文件夹。驱界会调用 Windows 自带的 pnputil 安装其中的驱动包，适合厂商官网下载的离线驱动。</p>
+              <button class="btn ghost" id="importDriverBtn2"><svg class="icon"><use href="#i-folder"></use></svg>选择驱动文件夹</button>
+            </article>
+            <article class="card tips-card">
+              <div class="card-head"><div><div class="card-title">更新建议</div><div class="card-sub">安全第一</div></div></div>
+              <ul class="tips-list">
+                <li><span>1</span>更新前保存工作，部分驱动需要重启。</li>
+                <li><span>2</span>显卡、网卡等厂商驱动如未出现在 Windows Update，请从官方获取。</li>
+                <li><span>3</span>不要安装来源不明的 .inf 驱动包。</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section class="page" data-page="settings" id="page-settings" hidden>
+          <header class="page-head">
+            <div>
+              <div class="eyebrow">SETTINGS / 设置</div>
+              <h1>把驱界，<br>调成你的样子。</h1>
+              <p>主题、自动扫描、驱动年龄阈值和管理员状态都可以在这里调整。</p>
+            </div>
+          </header>
+
+          <div class="settings-grid">
+            <article class="card settings-card">
+              <div class="card-title">外观主题</div>
+              <div class="card-sub">深色适合夜间，浅色更清爽</div>
+              <div class="theme-grid" id="themeOptions">
+                <button class="theme-option is-active" data-theme-choice="dark"><span class="theme-preview dark"></span><b>深色</b><small>默认</small></button>
+                <button class="theme-option" data-theme-choice="light"><span class="theme-preview light"></span><b>浅色</b><small>明亮</small></button>
+                <button class="theme-option" data-theme-choice="system"><span class="theme-preview system"></span><b>跟随系统</b><small>自动</small></button>
+              </div>
+            </article>
+
+            <article class="card settings-card">
+              <div class="card-title">扫描设置</div>
+              <div class="setting-row">
+                <div><b>打开应用时自动扫描</b><small>启动后读取设备并查询 Windows Update</small></div>
+                <label class="switch-row"><input type="checkbox" id="settingAutoScan"><i class="switch"></i></label>
+              </div>
+              <div class="setting-row">
+                <div><b>过旧驱动阈值</b><small>超过该年限的驱动标记为“过旧”</small></div>
+                <select id="settingOldYears" class="select">
+                  <option value="3">3 年</option>
+                  <option value="5">5 年</option>
+                  <option value="8">8 年</option>
+                  <option value="10">10 年</option>
+                </select>
+              </div>
+            </article>
+
+            <article class="card settings-card">
+              <div class="card-title">权限与系统</div>
+              <div class="setting-row"><div><b>管理员权限</b><small id="settingsAdminText">通过 UAC 提权</small></div><span class="soft-badge" id="settingsAdminBadge">管理员</span></div>
+              <div class="setting-row"><div><b>设备扫描</b><small>SetupAPI / CfgMgr32</small></div><span class="soft-badge">本机</span></div>
+              <div class="setting-row"><div><b>驱动来源</b><small>Windows Update 驱动类别</small></div><span class="soft-badge">在线</span></div>
+              <div class="setting-row"><div><b>电脑</b><small id="settingsComputer">--</small></div><span class="soft-badge" id="settingsOs">--</span></div>
+            </article>
+
+            <article class="card settings-card">
+              <div class="card-title">数据与日志</div>
+              <div class="setting-row"><div><b>数据目录</b><small id="settingsDataPath">%LOCALAPPDATA%\QuJie</small></div><button class="btn small ghost" id="openDataBtn">打开</button></div>
+              <div class="setting-row"><div><b>运行日志</b><small id="settingsLogPath">app.log</small></div><button class="btn small ghost" id="openLogBtn">打开</button></div>
+              <div class="setting-row"><div><b>设备管理器</b><small>需要查看硬件问题时</small></div><button class="btn small ghost" id="openDeviceManagerBtn">打开</button></div>
+            </article>
+
+            <article class="card settings-card about-card">
+              <div class="about-logo"><img src="assets/icon-256.png" alt=""></div>
+              <div>
+                <div class="card-title">驱界</div>
+                <div class="card-sub">驱动检测 · 更新 · 设备修复</div>
+                <p>真实读取本机设备与 Windows Update 驱动源，不伪造扫描结果。安装驱动需要管理员权限。</p>
+                <div class="about-version">v1.0.0 · <span id="settingsVersion">1.0.0</span></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="card copyright-card">
+            <div class="copyright-icon"><svg class="icon"><use href="#i-shield"></use></svg></div>
+            <div><b>管理员权限由 Windows UAC 授予</b><span>驱界启动时会请求管理员权限。所有驱动安装操作都在本机执行，不上传设备信息。</span></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="drawer-root" id="drawerRoot" hidden>
+    <div class="drawer-backdrop" data-drawer-close></div>
+    <aside class="drawer">
+      <div class="drawer-head">
+        <div class="drawer-identity">
+          <div class="drawer-avatar" id="drawerAvatar">D</div>
+          <div>
+            <div class="drawer-name" id="drawerName">设备详情</div>
+            <div class="drawer-sub" id="drawerSub">--</div>
+          </div>
+        </div>
+        <button class="icon-btn" data-drawer-close aria-label="关闭"><svg class="icon"><use href="#i-close"></use></svg></button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+      <div class="drawer-foot">
+        <button class="btn ghost" data-drawer-close>关闭</button>
+        <button class="btn primary" id="deviceManagerBtn"><svg class="icon"><use href="#i-wrench"></use></svg>设备管理器</button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="modal-root" id="modalRoot" hidden>
+    <div class="modal-backdrop"></div>
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <div class="modal-top">
+        <div class="modal-icon" id="modalIcon"><svg class="icon"><use href="#i-info"></use></svg></div>
+        <div><h3 id="modalTitle">确认操作</h3><div class="modal-sub" id="modalSub"></div></div>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-actions" id="modalActions"></div>
+    </div>
+  </div>
+
+  <div class="toast-host" id="toastHost"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
